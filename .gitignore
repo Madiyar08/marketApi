@@ -3,4 +3,6 @@ venv/
 *.db
 *.sqlite
 *.sqlite3
+
 /db/*
+
