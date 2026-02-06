@@ -30,7 +30,7 @@ async def handle_text(message: types.Message):
     text_data = message.text
 
     # Отправляем данные на сервер через POST запрос
-    url = 'http://localhost:8000/markets/process-market-data/'  # Исправленный URL
+    url = 'https://market-contacts-api.onrender.com/markets/process-market-data/'
     headers = {'Content-Type': 'text/plain'}  # Изменено на text/plain
 
     try:
