@@ -10,34 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from django.http import HttpResponseForbidden
-ALLOWED_IPS = [
-    "217.30.160.187",  # IP колл-центра
-]
+from django.utils.deprecation import MiddlewareMixin
 
-class AllowOnlyCallCenterIPMiddleware:
-    """
-    Разрешает доступ только с указанных IP.
-    Всем остальным возвращает 403 Forbidden.
-    """
-    def __init__(self, get_response):
-        self.get_response = get_response
+class AllowOnlyCallCenterIPMiddleware(MiddlewareMixin):
+    ALLOWED_IPS = ["217.30.160.187"]  # IP колл-центра
 
-    def __call__(self, request):
-        ip = self.get_client_ip(request)
-        if ip not in ALLOWED_IPS:
-            return HttpResponseForbidden("Доступ запрещён")
-        return self.get_response(request)
-
-    def get_client_ip(self, request):
-        # Проверяем заголовки X-Forwarded-For (если через прокси)
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0].strip()
+    def process_request(self, request):
+        ip = request.META.get('HTTP_X_FORWARDED_FOR')
+        if ip:
+            ip = ip.split(',')[0].strip()
         else:
             ip = request.META.get('REMOTE_ADDR')
-        return ip
-
-
+        if ip not in self.ALLOWED_IPS:
+            return HttpResponseForbidden("Доступ запрещён")
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -77,7 +62,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "core.middleware.AllowOnlyCallCenterIPMiddleware",
+    'core.middleware.AllowOnlyCallCenterIPMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
