@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: market-contacts-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DATABASE_URL
+        scope: service
+        value: postgresql://neondb_owner:npg_LEaRzK9UW3cM@ep-ancient-dawn-adgj8c4n-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - key: PYTHON_VERSION
+        value: 3.11
+    preDeployCommand: python manage.py migrate
