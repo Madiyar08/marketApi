@@ -47,4 +47,5 @@ class Market(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.market_name
+        return self.market_name or "Неизвестный маркет"
+
