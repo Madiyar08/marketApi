@@ -30,8 +30,6 @@ et_xmlfile==2.0.0
 frozenlist==1.7.0
 geographiclib==2.1
 geopy==2.4.1
-# Editable install with no version control (ghunt==2.3.3)
--e c:\users\one.notebooks\downloads\ghunt-master\ghunt-master
 gitdb==4.0.12
 GitPython==3.1.46
 google-api-core==2.29.0
